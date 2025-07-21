@@ -1,0 +1,26 @@
+services:
+  zerotier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zt
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - zerotier-data:/var/lib/zerotier-one
+      - ./shared:/shared
+    environment:
+      - TZ=${TZ:-Etc/UTC}
+      - ZEROTIER_ONE_NETWORK_IDS=<insert>
+      - ZT_NETWORK_ID=<insert>
+      - PUID=0
+      - PGID=0
+    restart: unless-stopped
+    network_mode: "host"
+volumes:
+  zerotier-data:
+  shared:
